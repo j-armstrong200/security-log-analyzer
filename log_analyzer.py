@@ -17,6 +17,13 @@ with open("security_logs.csv", newline="") as file:
    
         if event["status"] == "Success" and event["country"] != "US":
             print("MEDIUM:", event["username"], "logged in successfully from", event["country"])
+
+            findings.append({
+                "username": event["username"],
+                "severity": "Medium",
+                "finding": "Successful login from unusual geographic location",
+                "recommendation": "Verify the login with the user and investigate the source IP"
+        })
 for username, count in failed_logins.items():
     if count >= 5:
         print("HIGH:", username, "had", count, "failed login attempts - possible brute-force activity!")
@@ -27,3 +34,10 @@ for username, count in failed_logins.items():
             "finding": "Possible brute-force activity",
             "recommendation": "Investigate the account and review authentication activity"
         })
+
+with open("security_findings.csv", "w", newline="") as report_file:
+    fieldnames = ["username", "severity", "finding", "recommendation"]
+    writer = csv.DictWriter(report_file, fieldnames=fieldnames)
+
+    writer.writeheader()
+    writer.writerows(findings)
