@@ -1,3 +1,3 @@
-username,severity,finding,recommendation
-tlee,Medium,Successful login from unusual geographic location,Verify the login with the user and investigate the source IP
-bwilliams,High,Possible brute-force activity,Investigate the account and review authentication activity
+username,source_ip,country,severity,finding,recommendation
+tlee,198.51.100.22,Russia,Medium,Successful login from unusual geographic location,Verify the login with the user and investigate the source IP
+bwilliams,,,High,Possible brute-force activity,Investigate the account and review authentication activity

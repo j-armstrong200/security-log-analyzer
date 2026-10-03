@@ -20,6 +20,8 @@ with open("security_logs.csv", newline="") as file:
 
             findings.append({
                 "username": event["username"],
+                "source_ip": event["source_ip"],
+                "country": event["country"],
                 "severity": "Medium",
                 "finding": "Successful login from unusual geographic location",
                 "recommendation": "Verify the login with the user and investigate the source IP"
@@ -30,13 +32,15 @@ for username, count in failed_logins.items():
 
         findings.append({
             "username": username,
+            "source_ip": "",
+            "country": "",
             "severity": "High",
             "finding": "Possible brute-force activity",
             "recommendation": "Investigate the account and review authentication activity"
         })
 
 with open("security_findings.csv", "w", newline="") as report_file:
-    fieldnames = ["username", "severity", "finding", "recommendation"]
+    fieldnames = ["username", "source_ip", "country", "severity", "finding", "recommendation"]
     writer = csv.DictWriter(report_file, fieldnames=fieldnames)
 
     writer.writeheader()
