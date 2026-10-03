@@ -2,6 +2,7 @@ import csv
 
 findings = []
 failed_logins = {}
+failed_login_ips = {}
 
 with open("security_logs.csv", newline="") as file:
     reader = csv.DictReader(file)
@@ -14,6 +15,7 @@ with open("security_logs.csv", newline="") as file:
                 failed_logins[username] = 0
 
             failed_logins[username] += 1
+            failed_login_ips[username] = event["source_ip"]
    
         if event["status"] == "Success" and event["country"] != "US":
             print("MEDIUM:", event["username"], "logged in successfully from", event["country"])
@@ -32,7 +34,7 @@ for username, count in failed_logins.items():
 
         findings.append({
             "username": username,
-            "source_ip": "",
+            "source_ip": failed_login_ips[username],
             "country": "",
             "severity": "High",
             "finding": "Possible brute-force activity",
